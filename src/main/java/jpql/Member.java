@@ -12,6 +12,9 @@ public class Member {
 
     private int age;
 
+    @Enumerated(EnumType.STRING)
+    private MemberType type;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
@@ -61,5 +64,13 @@ public class Member {
     public void changeTeam(Team team){
         this.team = team;
         team.getMembers().add(this);
+    }
+
+    public MemberType getType() {
+        return type;
+    }
+
+    public void setType(MemberType type) {
+        this.type = type;
     }
 }

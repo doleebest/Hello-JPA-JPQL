@@ -9,6 +9,8 @@ import jakarta.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 
+import static jpql.MemberType.ADMIN;
+
 public class JpaMain {
 
     public static void main(String[] args) {
@@ -27,6 +29,7 @@ public class JpaMain {
             Member member = new Member();
             member.setUsername("member1");
             member.setAge(10);
+            member.setType(ADMIN);
             em.persist(member);
 
             member.setTeam(team);
@@ -34,11 +37,9 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String query = "select m from Member m inner join m.team t";
-            List<Team> result = em.createQuery(query, Team.class)
-                    .setFirstResult(1)
-                    .setMaxResults(10)
-                    .getResultList();
+            String query = "select m.username, 'HELLO', TRUE from Member m "
+                    +"where m.type = jpql.MemberType.ADMIN";
+            List<Team> result = em.createQuery(query).getResultList();
 
             tx.commit();
         } catch (Exception e){
