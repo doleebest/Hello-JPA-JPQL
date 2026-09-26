@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
 import java.util.List;
+import java.util.Objects;
 
 public class JpaMain {
 
@@ -24,14 +25,11 @@ public class JpaMain {
             member.setAge(10);
             em.persist(member);
 
-            TypedQuery<Member> query = em.createQuery("select m from Member m", Member.class);
-            TypedQuery<String> query2 = em.createQuery("select m.username from Member m", String.class);
-            Query query3 = em.createQuery("select m.username, m.age from Member m");
+            em.flush();
+            em.clear();
 
-            TypedQuery<Member> query4 = em.createQuery("select m from Member m where m.username =:username", Member.class);
-            query4.setParameter("username", "member1");
-            Member singleResult = query4.getSingleResult();
-            System.out.println(singleResult);
+            List<Address> result = em.createQuery("select o.address from Order m", Address.class).getResultList();
+            List<Member> result2 = em.createQuery("SELECT m.username, m.age FROM Member m", Member.class).getResultList();
 
             tx.commit();
         } catch (Exception e){
