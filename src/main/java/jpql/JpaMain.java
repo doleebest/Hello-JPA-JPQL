@@ -28,7 +28,10 @@ public class JpaMain {
             TypedQuery<String> query2 = em.createQuery("select m.username from Member m", String.class);
             Query query3 = em.createQuery("select m.username, m.age from Member m");
 
-
+            TypedQuery<Member> query4 = em.createQuery("select m from Member m where m.username =:username", Member.class);
+            query4.setParameter("username", "member1");
+            Member singleResult = query4.getSingleResult();
+            System.out.println(singleResult);
 
             tx.commit();
         } catch (Exception e){
