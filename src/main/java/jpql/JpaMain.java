@@ -20,27 +20,25 @@ public class JpaMain {
         tx.begin();
 
         try{
+            Team team = new Team();
+            team.setName("team1");
+            em.persist(team);
+
             Member member = new Member();
             member.setUsername("member1");
             member.setAge(10);
             em.persist(member);
 
+            member.setTeam(team);
+
             em.flush();
             em.clear();
 
-            // projection
-//            List<Address> result = em.createQuery("select o.address from Order o", Address.class).getResultList();
-//            List<Member> result2 = em.createQuery("SELECT m.username, m.age FROM Member m", Member.class).getResultList();
-//            List<MembetDTO> result3 = em.createQuery("SELECT new jpql.MembetDTO(m.username, m.age) FROM Member m", MembetDTO.class).getResultList();
-//
-            List<Member> result = em.createQuery("select m from Member m order by  m.age desc")
+            String query = "select m from Member m inner join m.team t";
+            List<Team> result = em.createQuery(query, Team.class)
                     .setFirstResult(1)
                     .setMaxResults(10)
                     .getResultList();
-
-            for (Member member1 : result){
-                System.out.println(member1);
-            }
 
             tx.commit();
         } catch (Exception e){
