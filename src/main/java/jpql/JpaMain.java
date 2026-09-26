@@ -28,8 +28,19 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            List<Address> result = em.createQuery("select o.address from Order m", Address.class).getResultList();
-            List<Member> result2 = em.createQuery("SELECT m.username, m.age FROM Member m", Member.class).getResultList();
+            // projection
+//            List<Address> result = em.createQuery("select o.address from Order o", Address.class).getResultList();
+//            List<Member> result2 = em.createQuery("SELECT m.username, m.age FROM Member m", Member.class).getResultList();
+//            List<MembetDTO> result3 = em.createQuery("SELECT new jpql.MembetDTO(m.username, m.age) FROM Member m", MembetDTO.class).getResultList();
+//
+            List<Member> result = em.createQuery("select m from Member m order by  m.age desc")
+                    .setFirstResult(1)
+                    .setMaxResults(10)
+                    .getResultList();
+
+            for (Member member1 : result){
+                System.out.println(member1);
+            }
 
             tx.commit();
         } catch (Exception e){
